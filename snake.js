@@ -1,55 +1,71 @@
 function Snake(x, y, food) {
-  this.x = x
-  this.y = y
+  this.cells = [{x: x, y: y}]
   this.direction = null // up, left, down, right
+  this.isEating = false
+  this.isDead = false
 
   this.draw = function() {
-    var snakeCell = document.querySelector(`.row${this.y} .col${this.x}`)
-    snakeCell.classList.add('snake')
+    this.cells.forEach(function(cell) {
+      var snakeCell = document.querySelector(`.row${cell.y} .col${cell.x}`)
+      snakeCell.classList.add('snake')
+    })
   }
 
   this.updateCoords = function() {
+    var copyOfFirstCell = {x: this.cells[0].x, y: this.cells[0].y} 
+    this.cells.unshift(copyOfFirstCell)
+    var firstCell = this.cells[0]
     switch (this.direction) {
       case 'up':
-        if(this.y === 1) {
-          this.y = 20
+        if(firstCell.y === 1) {
+          firstCell.y = 20
         } else {
-          this.y--
+          firstCell.y--
         }
       break
     case 'left':
-      if(this.x === 1) {
-        this.x = 20
+      if(firstCell.x === 1) {
+        firstCell.x = 20
       } else {
-        this.x--
+        firstCell.x--
       }
       break
     case 'down':
-      if(this.y === 20) {
-        this.y = 1
+      if(firstCell.y === 20) {
+        firstCell.y = 1
       } else {
-        this.y++
+        firstCell.y++
       }
       break
     case 'right':
-      if(this.x === 20) {
-        this.x = 1
+      if(firstCell.x === 20) {
+        firstCell.x = 1
       } else {
-        this.x++
+        firstCell.x++
       }
       break
     }
+    if(!this.isEating) {
+      this.cells.pop()
+    } else {
+      this.isEating = false
+    }
+    this.checkOverlap()
   }
 
   this.erase = function() {
-    var snakeCell = document.querySelector('.snake')
-    snakeCell.classList.remove('snake')
+    var snakeCells = document.querySelectorAll('.snake')
+    snakeCells.forEach(function(snakeCell) {
+      snakeCell.classList.remove('snake')
+    })
   }
 
-  this.isEating = function() {
-    if(food.x === this.x && food.y === this.y) {
-      console.log('ÑAM ÑAM ÑAM!!')
-      food.respawn()
+  this.checkOverlap = function() {
+    var head = this.cells[0]
+    for(let i = 1; i< this.cells.length; i++) {
+      if (head.x === this.cells[i].x && head.y === this.cells[i].y) {
+        this.isDead = true
+      }
     }
   }
 }
