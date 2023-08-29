@@ -1,11 +1,11 @@
 import { Snake } from "./snake.js"
 import { Food } from "./food.js"
 
-var snake = new Snake(10, 10)
-snake.draw()
-
 var food = new Food(5, 3)
 food.draw()
+
+var snake = new Snake(10, 10, food)
+snake.draw()
 
 window.addEventListener('keydown', function(e) {
   switch (e.key) {
@@ -30,4 +30,5 @@ function gameLoop() {
   snake.updateCoords()
   snake.erase()
   snake.draw()
+  snake.isEating()
 }

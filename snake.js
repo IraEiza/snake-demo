@@ -49,6 +49,7 @@ function Snake(x, y, food) {
   this.isEating = function() {
     if(food.x === this.x && food.y === this.y) {
       console.log('ÑAM ÑAM ÑAM!!')
+      food.respawn()
     }
   }
 }
